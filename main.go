@@ -28,7 +28,7 @@ type DataBase struct {
 //		fmt.Printf("Файл %s создан\n", filename)
 //		return nil
 //	}
-//	fmt.Printf("Файл %s уже сущетвует\n", filename)
+//	fmt.Printf("Файл %s уже существует\n", filename)
 //	return nil
 //}
 
