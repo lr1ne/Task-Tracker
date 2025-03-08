@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"time"
@@ -44,13 +43,9 @@ func main() {
 	}
 	defer file.Close()
 
-	byteValue, err := io.ReadAll(file)
-	if err != nil {
-		log.Fatalf("Failed to read file: %v", err)
-	}
-
 	var tasks []DataBase
-	err = json.Unmarshal(byteValue, &tasks)
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&tasks)
 	if err != nil {
 		log.Fatalf("JSON parsing error: %v", err)
 	}
@@ -99,7 +94,41 @@ func main() {
 				}
 			}
 		case "add":
-			fmt.Println("Test Test")
+			if len(os.Args) > 2 {
+				var maxID int
+				for _, task := range tasks {
+					if task.ID > maxID {
+						maxID = task.ID
+					}
+				}
+
+				newTask := DataBase{
+					ID:          maxID + 1,
+					Description: os.Args[2],
+					Status:      "todo",
+					CreatedAt:   time.Now(),
+					UpdatedAt:   time.Now(),
+				}
+				tasks = append(tasks, newTask)
+
+				file, err := os.Create("data.json")
+				if err != nil {
+					fmt.Println("Error when opening a file for recording:", err)
+					return
+				}
+				defer file.Close()
+
+				err = json.NewEncoder(file).Encode(tasks)
+				if err != nil {
+					fmt.Println("JSON encoding error JSON:", err)
+					return
+				}
+
+				fmt.Println("Successfully:")
+			} else {
+				fmt.Println("Use <add \"Your new task\"> ")
+			}
+
 		case "update":
 			// todo
 		case "delete":
