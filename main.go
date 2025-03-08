@@ -58,12 +58,53 @@ func main() {
 	if len(os.Args) > 0 {
 		switch os.Args[1] {
 		case "list":
-			for _, task := range tasks {
-				fmt.Printf("ID: %d\nDescription: %s\nStatus: %s\nCreated at: %s\nUpdated at: %s\n\n",
-					task.ID, task.Description, task.Status, task.CreatedAt.Format("02.01.2006 15:04"), task.UpdatedAt.Format("02.01.2006 15:04"))
+			if len(os.Args) > 2 {
+				found := false
+
+				if os.Args[2] == "todo" {
+					fmt.Println("All todo tasks: ")
+					for _, task := range tasks {
+						if task.Status == "todo" {
+							found = true
+							fmt.Printf("ID: %d\nDescription: %s\nStatus: %s\nCreated at: %s\nUpdated at: %s\n\n",
+								task.ID, task.Description, task.Status, task.CreatedAt.Format("02.01.2006 15:04"), task.UpdatedAt.Format("02.01.2006 15:04"))
+						}
+					}
+				} else if os.Args[2] == "in-progress" {
+					fmt.Println("All in progress tasks: ")
+					for _, task := range tasks {
+						if task.Status == "in-progress" {
+							found = true
+							fmt.Printf("ID: %d\nDescription: %s\nStatus: %s\nCreated at: %s\nUpdated at: %s\n\n",
+								task.ID, task.Description, task.Status, task.CreatedAt.Format("02.01.2006 15:04"), task.UpdatedAt.Format("02.01.2006 15:04"))
+						}
+					}
+				} else if os.Args[2] == "done" {
+					fmt.Println("All done tasks: ")
+					for _, task := range tasks {
+						if task.Status == "done" {
+							found = true
+							fmt.Printf("ID: %d\nDescription: %s\nStatus: %s\nCreated at: %s\nUpdated at: %s\n\n",
+								task.ID, task.Description, task.Status, task.CreatedAt.Format("02.01.2006 15:04"), task.UpdatedAt.Format("02.01.2006 15:04"))
+						}
+					}
+				}
+				if !found {
+					fmt.Printf("No tasks with \"%s\".\n", os.Args[2])
+				}
+			} else {
+				for _, task := range tasks {
+					fmt.Printf("ID: %d\nDescription: %s\nStatus: %s\nCreated at: %s\nUpdated at: %s\n\n",
+						task.ID, task.Description, task.Status, task.CreatedAt.Format("02.01.2006 15:04"), task.UpdatedAt.Format("02.01.2006 15:04"))
+				}
 			}
-		case "test":
+		case "add":
 			fmt.Println("Test Test")
+		case "update":
+			// todo
+		case "delete":
+			// todo
+		case "":
 		default:
 			fmt.Println("Нету такова")
 		}
