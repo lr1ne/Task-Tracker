@@ -120,11 +120,11 @@ func main() {
 
 				err = json.NewEncoder(file).Encode(tasks)
 				if err != nil {
-					fmt.Println("JSON encoding error JSON:", err)
+					fmt.Println("JSON encoding error:", err)
 					return
 				}
 
-				fmt.Println("Successfully:")
+				fmt.Println("Successfully added!")
 			} else {
 				fmt.Println("Use <add \"Your new task\"> ")
 			}
@@ -132,7 +132,38 @@ func main() {
 		case "update":
 			// todo
 		case "delete":
-			// todo
+			if len(os.Args) > 2 {
+				var deletedId int
+				_, err := fmt.Sscanf(os.Args[2], "%d", &deletedId)
+				if err != nil {
+					fmt.Println("ID parsing error: ", err)
+					return
+				}
+
+				var updatedTasks []DataBase
+				for _, task := range tasks {
+					if task.ID != deletedId {
+						updatedTasks = append(updatedTasks, task)
+					}
+				}
+
+				file, err := os.Create("data.json")
+				if err != nil {
+					fmt.Println("Error when opening a file for recording: ", err)
+					return
+				}
+				defer file.Close()
+
+				err = json.NewEncoder(file).Encode(updatedTasks)
+				if err != nil {
+					fmt.Println("JSON encoding error:", err)
+					return
+				}
+
+				fmt.Println("Delete successfully!")
+			} else {
+				fmt.Println("Use <delete ID>")
+			}
 		case "":
 		default:
 			fmt.Println("Нету такова")
