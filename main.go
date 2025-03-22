@@ -144,6 +144,7 @@ func main() {
 				for _, task := range tasks {
 					if task.ID != deletedId {
 						updatedTasks = append(updatedTasks, task)
+						break
 					}
 				}
 
@@ -159,12 +160,43 @@ func main() {
 					fmt.Println("JSON encoding error:", err)
 					return
 				}
-
 				fmt.Println("Delete successfully!")
 			} else {
 				fmt.Println("Use <delete ID>")
 			}
-		case "":
+		case "mark-done":
+			if len(os.Args) > 2 {
+				var markDoneID int
+				_, err := fmt.Sscanf(os.Args[2], "%d", &markDoneID)
+				if err != nil {
+					fmt.Println("ID parsing error: ", err)
+				}
+
+				var updatedTasks []DataBase
+				for _, task := range tasks {
+					if task.ID == markDoneID {
+						task.Status = "done"
+						updatedTasks = append(updatedTasks, task)
+						break
+					}
+				}
+
+				file, err := os.Create("data.json")
+				if err != nil {
+					fmt.Println("Error when opening a file for recording: ", err)
+					return
+				}
+				defer file.Close()
+
+				err = json.NewEncoder(file).Encode(updatedTasks)
+				if err != nil {
+					fmt.Println("JSON encoding error: ", err)
+					return
+				}
+
+			} else {
+				fmt.Println("Use <mark-done ID>")
+			}
 		default:
 			fmt.Println("Нету такова")
 		}
