@@ -24,3 +24,5 @@ mark-done [ID]                mark the status of the task as done
 1. Go to [repository releases](https://github.com/lr1ne/Task-Tracker/releases).
 2. Download last release.
 3. Done!
+
+The idea was taken from https://roadmap.sh/projects/task-tracker
