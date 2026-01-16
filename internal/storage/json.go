@@ -80,8 +80,7 @@ func (s *JSONStorage) GetTasks() ([]models.DataBase, error) {
 		return nil, err
 	}
 	defer file.Close()
-	err = json.NewDecoder(file).Decode(&tasks)
-	if err != nil {
+	if err = json.NewDecoder(file).Decode(&tasks); err != nil {
 		return nil, err
 	}
 	s.tasks = tasks
